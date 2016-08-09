@@ -27,7 +27,8 @@ import javax.sql.DataSource;
 /**
  * Created by JK on 2016-07-28.
  */
-@Configuration
+// 임시 주석처리
+//@Configuration
 @EnableBatchProcessing
 public class BatchConfiguration {
 
@@ -87,6 +88,7 @@ public class BatchConfiguration {
                 .incrementer(new RunIdIncrementer())
                 .listener(listener())
                 .flow(step1())
+//                .next(step2())
                 .end()
                 .build();
     }
@@ -100,5 +102,17 @@ public class BatchConfiguration {
                 .writer(writer())
                 .build();
     }
+
+    @Bean
+    public Step step2() {
+        return stepBuilderFactory.get("step2")
+                .<Person, Person> chunk(10)
+                .reader(reader())
+                .processor(processor())
+                .writer(writer())
+                .build();
+    }
+
+
     // end::jobstep[]
 }
